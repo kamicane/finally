@@ -1,7 +1,7 @@
 {
   "name": "finally",
   "version": "0.0.1",
-  "description": "simplistic flow control library",
+  "description": "sane flow control library",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -18,6 +18,9 @@
     "flow",
     "control"
   ],
+  "scripts": {
+    "test": "./node_modules/.bin/mocha ./test"
+  },
   "author": "Valerio Proietti <kamicane@gmail.com>",
   "license": "MIT"
 }
