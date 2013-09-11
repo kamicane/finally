@@ -1,0 +1,23 @@
+{
+  "name": "finally",
+  "version": "0.0.1",
+  "description": "simplistic flow control library",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "github.com/kamicane/finally"
+  },
+  "dependencies": {
+    "prime": "0.3"
+  },
+  "devDependencies": {
+    "mocha": "1.x",
+    "expect.js": "0.2"
+  },
+  "keywords": [
+    "flow",
+    "control"
+  ],
+  "author": "Valerio Proietti <kamicane@gmail.com>",
+  "license": "MIT"
+}
