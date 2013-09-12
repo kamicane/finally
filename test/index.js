@@ -119,6 +119,14 @@ describe('Finally', function(){
 
     })
 
+    it('should ignore empty parallels', function() {
+
+      flow().then([]).then().finally(function(err) {
+        expect(err).to.be(undefined)
+      })
+
+    })
+
   })
 
   describe('asyncronous operations', function() {
