@@ -19,7 +19,9 @@ var Flow = prime({
   /* add steps to the flow */
   then: function(callbacks) {
     var self = this;
-    if (type(callbacks) === 'function') callbacks = slice(arguments);
+    if (!arguments.length) return this;
+    if (type(callbacks) !== 'array') callbacks = slice(arguments);
+    if (!callbacks.length) return this;
 
     var i = 0;
 
@@ -37,7 +39,6 @@ var Flow = prime({
       };
 
     }));
-
     return this;
   },
 
@@ -138,6 +139,6 @@ var Controller = function Controller(flow, index) {
 /* public interface */
 module.exports = function() {
   var flow = new Flow();
-  if (arguments.length) flow.then.apply(flow, arguments);
+  flow.then.apply(flow, arguments);
   return flow;
 };
