@@ -127,6 +127,44 @@ describe('Finally', function(){
 
     })
 
+    it('should go to the next sequential on empty spreads', function() {
+
+      flow(function(err) {
+        this.spread(null, [])
+      }).then(function(error, number) {
+        expect(error).to.be(null)
+        expect(number).to.be(undefined)
+        this.done(null, 10);
+      }).finally(function(error, number) {
+        expect(number).to.be(10);
+      })
+
+      flow(function(err) {
+        this.spread(null)
+      }).then(function(error, number) {
+        expect(error).to.be(null)
+        expect(number).to.be(undefined)
+        this.done(null, 10);
+      }).finally(function(error, number) {
+        expect(number).to.be(10);
+      })
+
+    })
+
+    it('should spread objects with a length', function() {
+
+      flow(function(err) {
+        this.spread(null, "yes")
+      }).then(function(error, letter) {
+        expect(error).to.be(null)
+        this.done(null, letter);
+      }).finally(function(error, y, e, s) {
+        expect(error).to.be(null)
+        expect(y + e + s).to.eql("yes")
+      })
+
+    })
+
   })
 
   describe('asyncronous operations', function() {

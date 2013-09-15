@@ -65,8 +65,9 @@ var Flow = prime({
   _spread: function(error, args) {
     var seq = this._next();
     if (!seq || !(seq = seq[0])) return;
+    if (!args || !args.length) args = [undefined];
     this._length = args.length;
-    if (args) forEach(args, function(arg) {
+    forEach(args, function(arg) {
       seq(error, arg);
     });
   },
