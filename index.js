@@ -93,6 +93,7 @@ var Flow = prime({
     // reset variables
 
     this._arguments = [];
+    this._errors = [];
     this._controls = [];
 
     return seq;
@@ -100,7 +101,15 @@ var Flow = prime({
 
   _done: function(index, error, data) {
     this._arguments[index] = data;
-    if (!--this._length) this._continue.apply(this, [error].concat(this._arguments));
+    if (error) this._errors.push(error);
+    if (!--this._length) {
+      var errors = null;
+      if (this._errors.length === 1) errors = this._errors[0];
+      else if (this._errors.length) errors = new Error(map(this._errors, function(e) {
+        return e.message;
+      }).join('\n'));
+      this._continue.apply(this, [errors].concat(this._arguments));
+    }
     else this._controls[index]._kill();
   }
 

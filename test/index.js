@@ -165,6 +165,23 @@ describe('Finally', function(){
 
     })
 
+    it('should get errors when parallels return errors', function() {
+
+      flow(function(err) {
+        this.done(new Error('A'));
+      }, function(err) {
+        this.done(new Error('B'));
+      }, function(err) {
+        this.done(null, true)
+      }).finally(function(error, vA, vB, vC) {
+        expect(error.message).to.be('A\nB')
+        expect(vA).to.be(undefined)
+        expect(vB).to.be(undefined)
+        expect(vC).to.be(true)
+      })
+
+    })
+
   })
 
   describe('asyncronous operations', function() {
