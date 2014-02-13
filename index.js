@@ -3,10 +3,11 @@ Finally
 */'use strict';
 
 var prime = require('prime');
-var type = require('prime/type');
-var map = require('prime/array/map');
-var slice = require('prime/array/slice');
-var forEach = require('prime/array/forEach');
+
+var kindOf = require('mout/lang/kindOf');
+var map = require('mout/array/map');
+var slice = require('mout/array/slice');
+var forEach = require('mout/array/forEach');
 
 /* create the flow */
 var Flow = prime({
@@ -20,7 +21,7 @@ var Flow = prime({
   then: function(callbacks) {
     var self = this;
     if (!arguments.length) return this;
-    if (type(callbacks) !== 'array') callbacks = slice(arguments);
+    if (kindOf(callbacks) !== 'Array') callbacks = slice(arguments);
     if (!callbacks.length) return this;
 
     var i = 0;
