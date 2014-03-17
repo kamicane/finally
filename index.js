@@ -64,9 +64,10 @@ var Flow = prime({
 
   /* will make a single sequential entry with one parallel for each entry in the object */
   parallel: function(object, parallel) {
-    this._seq.push(cmap(object, function(value, key) {
+    var parallels = cmap(object, function(value, key) {
       return this._parallel(parallel, [value, key]);
-    }, this));
+    }, this);
+    if (parallels.length) this._seq.push(parallels);
     return this;
   },
 

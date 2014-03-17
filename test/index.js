@@ -134,9 +134,9 @@ describe('Finally', function(){
       }).then(function(error, number) {
         expect(error).to.be(null)
         expect(number).to.be(undefined)
-        this.done(null, 10);
+        this.done(null, 10)
       }).finally(function(error, number) {
-        expect(number).to.be(10);
+        expect(number).to.be(10)
       })
 
       flow(function(err) {
@@ -144,9 +144,9 @@ describe('Finally', function(){
       }).then(function(error, number) {
         expect(error).to.be(null)
         expect(number).to.be(undefined)
-        this.done(null, 10);
+        this.done(null, 10)
       }).finally(function(error, number) {
-        expect(number).to.be(10);
+        expect(number).to.be(10)
       })
 
     })
@@ -157,7 +157,7 @@ describe('Finally', function(){
         this.spread(null, "yes")
       }).then(function(error, letter) {
         expect(error).to.be(null)
-        this.done(null, letter);
+        this.done(null, letter)
       }).finally(function(error, y, e, s) {
         expect(error).to.be(null)
         expect(y + e + s).to.eql("yes")
@@ -168,9 +168,9 @@ describe('Finally', function(){
     it('should get errors when parallels return errors', function() {
 
       flow(function(err) {
-        this.done(new Error('A'));
+        this.done(new Error('A'))
       }, function(err) {
-        this.done(new Error('B'));
+        this.done(new Error('B'))
       }, function(err) {
         this.done(null, true)
       }).finally(function(error, vA, vB, vC) {
@@ -193,6 +193,18 @@ describe('Finally', function(){
       .run(null, 0)
     })
 
+    it('should map an empty array to a sequential', function(done) {
+      flow()
+      .sequential([], function() {
+        throw new Error('should not see me')
+      })
+      .then(function(error, res) {
+        expect(res).to.be(10)
+        done()
+      })
+      .run(null, 10)
+    })
+
     it('should map an object to a sequential', function() {
       flow()
       .sequential({a: 1, b: 4, c: 5}, function(value, key, err, num) {
@@ -202,6 +214,18 @@ describe('Finally', function(){
         expect(res).to.be(10)
       })
       .run(null, 0)
+    })
+
+    it('should map an empty object to a sequential', function(done) {
+      flow()
+      .sequential({}, function(value, key) {
+        throw new Error('should not see me')
+      })
+      .then(function(error, res) {
+        expect(res).to.be(10)
+        done()
+      })
+      .run(null, 10)
     })
 
     it('should map an array to parallels', function() {
@@ -217,6 +241,18 @@ describe('Finally', function(){
       .run(null, 1)
     })
 
+    it('should map an empty array to parallels', function(done) {
+      flow()
+      .parallel([], function(item, i) {
+        throw new Error('should not see me')
+      })
+      .then(function(error, value) {
+        expect(value).to.be(10)
+        done()
+      })
+      .run(null, 10)
+    })
+
     it('should map an object to parallels', function() {
       flow()
       .parallel({a: 1, b: 2, c: 4}, function(value, key, err, num) {
@@ -228,6 +264,18 @@ describe('Finally', function(){
         expect(num).to.be(10)
       })
       .run(null, 1)
+    })
+
+    it('should map an empty object to parallels', function(done) {
+      flow()
+      .parallel({}, function(item, i) {
+        throw new Error('should not see me')
+      })
+      .then(function(error, value) {
+        expect(value).to.be(10)
+        done()
+      })
+      .run(null, 10)
     })
 
   })
