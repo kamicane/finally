@@ -8,6 +8,12 @@ var kindOf = require('mout/lang/kindOf');
 var map = require('mout/array/map');
 var slice = require('mout/array/slice');
 var forEach = require('mout/array/forEach');
+var reduce = require('mout/array/reduce');
+
+var each = require('mout/collection/forEach');
+var cmap = require('mout/collection/map');
+
+var push_ = Array.prototype.push;
 
 /* create the flow */
 var Flow = prime({
@@ -18,28 +24,49 @@ var Flow = prime({
   },
 
   /* add steps to the flow */
-  then: function(callbacks) {
+  then: function() {
+    this._push(this._callbacks(arguments));
+    return this;
+  },
+
+  _parallel: function(parallel, args) {
     var self = this;
-    if (!arguments.length) return this;
-    if (kindOf(callbacks) !== 'Array') callbacks = slice(arguments);
-    if (!callbacks.length) return this;
-
-    var i = 0;
-
-    var exec = function(fn, index, args) {
-      var control = new Controller(self, index);
+    return function() {
+      var control = new Controller(self, self._index++);
       self._controls.push(control);
-      fn.apply(control, args);
+      parallel.apply(control, args ? args.concat(slice(arguments)) : arguments);
     };
+  },
 
-    this._seq.push(map(callbacks, function(parallel) {
+  _push: function(parallels, args) {
+    if (!parallels.length) return;
+    this._seq.push(map(parallels, function(parallel) {
+      return this._parallel(parallel, args);
+    }, this));
+  },
 
-      return function() {
-        var j = i++;
-        exec(parallel, j, arguments);
-      };
+  _callbacks: function(callbacks) {
+    return reduce(callbacks, function(a, b) {
+      if (kindOf(b) === 'Array') push_.apply(a, b);
+      else a.push(b);
+      return a;
+    }, []);
+  },
 
-    }));
+  /* will make a sequential entry for each entry in the object */
+  sequential: function(object) {
+    var callbacks = this._callbacks(slice(arguments, 1));
+    each(object, function(value, key) {
+      this._push(callbacks, [value, key]);
+    }, this);
+    return this;
+  },
+
+  /* will make a single sequential entry with one parallel for each entry in the object */
+  parallel: function(object, parallel) {
+    this._seq.push(cmap(object, function(value, key) {
+      return this._parallel(parallel, [value, key]);
+    }, this));
     return this;
   },
 
@@ -96,6 +123,7 @@ var Flow = prime({
     this._arguments = [];
     this._errors = [];
     this._controls = [];
+    this._index = 0;
 
     return seq;
   },

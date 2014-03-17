@@ -7,7 +7,7 @@ describe('Finally', function(){
 
   describe('syncronous operations', function() {
 
-    it('should accept a last step in finally', function() {
+    it('should accept a last step', function() {
 
       flow()
       .then(function(err, data) {
@@ -25,7 +25,7 @@ describe('Finally', function(){
 
     })
 
-    it('should accept a first step in the constructor and a last step in finally', function() {
+    it('should accept a first step in the constructor and a last step', function() {
 
       flow(function() {
         this.continue(null, 1)
@@ -182,11 +182,59 @@ describe('Finally', function(){
 
     })
 
+    it('should map an array to a sequential', function() {
+      flow()
+      .sequential([1,4,5], function(item, i, err, num) {
+        this.continue(null, item + num)
+      })
+      .then(function(error, res) {
+        expect(res).to.be(10)
+      })
+      .run(null, 0)
+    })
+
+    it('should map an object to a sequential', function() {
+      flow()
+      .sequential({a: 1, b: 4, c: 5}, function(value, key, err, num) {
+        this.continue(null, value + num)
+      })
+      .then(function(error, res) {
+        expect(res).to.be(10)
+      })
+      .run(null, 0)
+    })
+
+    it('should map an array to parallels', function() {
+      flow()
+      .parallel([1,2,4], function(item, i, err, num) {
+        this.done(null, item + num)
+      })
+      .then(function(error) {
+        var num = 0
+        for (var i = 1; i < arguments.length; i++) num += arguments[i]
+        expect(num).to.be(10)
+      })
+      .run(null, 1)
+    })
+
+    it('should map an object to parallels', function() {
+      flow()
+      .parallel({a: 1, b: 2, c: 4}, function(value, key, err, num) {
+        this.done(null, value + num)
+      })
+      .then(function(error) {
+        var num = 0
+        for (var i = 1; i < arguments.length; i++) num += arguments[i]
+        expect(num).to.be(10)
+      })
+      .run(null, 1)
+    })
+
   })
 
   describe('asyncronous operations', function() {
 
-    it('should accept a last step in finally', function(done) {
+    it('should accept a last step', function(done) {
 
       flow()
       .then(function(err, data) {
@@ -211,7 +259,7 @@ describe('Finally', function(){
 
     })
 
-    it('should accept a first step in the constructor and a last step in finally', function(done) {
+    it('should accept a first step in the constructor and a last step', function(done) {
 
       flow(function() {
         setTimeout(function() {
@@ -333,6 +381,65 @@ describe('Finally', function(){
         }.bind(this), 10)
       })
 
+    })
+
+    it('should map an array to a sequential', function() {
+      flow()
+      .sequential([1,4,5], function(item, i, err, num) {
+        setTimeout((function() {
+          this.continue(null, item + num)
+        }).bind(this), 10)
+      })
+      .then(function(error, res) {
+        expect(res).to.be(10)
+      })
+      .run(null, 0)
+    })
+
+    it('should map an object to a sequential', function(done) {
+      flow()
+      .sequential({a: 1, b: 4, c: 5}, function(value, key, err, num) {
+        setTimeout((function() {
+          this.continue(null, value + num)
+        }).bind(this), 10)
+      })
+      .then(function(error, res) {
+        expect(res).to.be(10)
+        done()
+      })
+      .run(null, 0)
+    })
+
+    it('should map an array to parallels', function(done) {
+      flow()
+      .parallel([1,2,4], function(item, i, err, num) {
+        setTimeout((function() {
+          this.done(null, item + num)
+        }).bind(this), 10 - item)
+      })
+      .then(function(error) {
+        var num = 0
+        for (var i = 1; i < arguments.length; i++) num += arguments[i]
+        expect(num).to.be(10)
+        done()
+      })
+      .run(null, 1)
+    })
+
+    it('should map an object to parallels', function(done) {
+      flow()
+      .parallel({a: 1, b: 2, c: 4}, function(value, key, err, num) {
+        setTimeout((function() {
+          this.done(null, value + num)
+        }).bind(this), 10 - value)
+      })
+      .then(function(error) {
+        var num = 0
+        for (var i = 1; i < arguments.length; i++) num += arguments[i]
+        expect(num).to.be(10)
+        done()
+      })
+      .run(null, 1)
     })
 
   })
