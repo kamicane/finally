@@ -1,3 +1,10 @@
+[![Package Info](http://img.shields.io/badge/npm-finally-blue.svg)](https://npmjs.org/package/finally)
+[![NPM Version](http://img.shields.io/npm/v/finally.svg)](https://npmjs.org/package/finally)
+[![Coverage Status](http://img.shields.io/coveralls/kamicane/finally/master.svg)](https://coveralls.io/r/kamicane/finally)
+[![Build Status](http://img.shields.io/travis/kamicane/finally/master.svg)](http://travis-ci.org/kamicane/finally)
+[![Dependencies Status](https://david-dm.org/kamicane/finally.svg?theme=shields.io)](https://david-dm.org/kamicane/finally)
+[![DevDependencies Status](https://david-dm.org/kamicane/finally/dev-status.svg?theme=shields.io)](https://david-dm.org/kamicane/finally#info=devDependencies)
+
 Finally
 =======
 
