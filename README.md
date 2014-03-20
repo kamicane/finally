@@ -1,3 +1,5 @@
+# ![Finally](http://kamicane.github.io/assets/finally.png)
+
 [![Package Info](http://img.shields.io/badge/npm-finally-blue.svg)](https://npmjs.org/package/finally)
 [![NPM Version](http://img.shields.io/npm/v/finally.svg)](https://npmjs.org/package/finally)
 [![Coverage Status](http://img.shields.io/coveralls/kamicane/finally/master.svg)](https://coveralls.io/r/kamicane/finally)
@@ -5,10 +7,7 @@
 [![Dependencies Status](https://david-dm.org/kamicane/finally.svg?theme=shields.io)](https://david-dm.org/kamicane/finally)
 [![DevDependencies Status](https://david-dm.org/kamicane/finally/dev-status.svg?theme=shields.io)](https://david-dm.org/kamicane/finally#info=devDependencies)
 
-Finally
-=======
-
-Finally is a simple flow control library for node.js and the browsers, with a mentally sane API.
+Finally is a simple flow control library for node.js and browsers, with a mentally sane API.
 
 ## It works like this
 
